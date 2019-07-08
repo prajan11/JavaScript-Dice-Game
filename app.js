@@ -66,21 +66,74 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
 
         
         //if 0 was active player, 1 is made active player and vice-versa 
-        activePlayer === 0? activePlayer = 1: activePlayer = 0;
-        //resetting round score to zero
-        roundScore = 0;
-
-        // when 1 is rolled in dice, updating round scores to zero
-        document.getElementById('current-0').textContent = '0';
-        document.getElementById('current-1').textContent = '0';
-
-        //toggling the active player between player 1 and player 2, to indicate the 
-        //active player through specific change in color of panel of active player
-        document.querySelector('.player-0-panel').classList.toggle('active');
-        document.querySelector('.player-1-panel').classList.toggle('active');
-
-        //for disappearance of dice after 1 is rolled in dice
-        document.querySelector('.dice').style.display='none';
+        nextPlayer();
     }
 
+
 });
+
+document.querySelector('.btn-hold').addEventListener('click',function(){
+    //Add current score to the global score
+    scores[activePlayer] = scores[activePlayer] + roundScore;
+
+
+
+    //Update the UI
+    document.getElementById('score-'+activePlayer).textContent=scores[activePlayer];
+
+
+    //Check if player won the game
+    if(scores[activePlayer]>=20){
+
+        //changing the name of cuurent player to winner
+        document.querySelector('#name-'+activePlayer).textContent = "Winner!";
+       
+        //hiding the dice after a player wins the game
+        document.querySelector('.dice').style.display='none';
+
+        //applying winner class to the winner player panel
+        document.querySelector('.player-'+activePlayer+'-panel').classList.add('winner');
+        
+         //removing active class from the winner
+         document.querySelector('.player-'+activePlayer+'-panel').classList.remove('active');
+
+
+    }
+    else{
+
+        //change the turn to the next player
+        nextPlayer();
+    
+        
+    }
+
+
+
+   
+
+
+    
+
+});
+
+
+function nextPlayer(){
+
+    //switch the turn to the next player
+    activePlayer === 0? activePlayer = 1: activePlayer = 0;
+    roundScore = 0;
+
+    document.getElementById('current-0').textContent = '0';
+    document.getElementById('current-1').textContent = '0';
+
+    //toggling the active player between player 1 and player 2, to indicate the 
+    //active player through specific change in color of panel of active player
+    document.querySelector('.player-0-panel').classList.toggle('active');
+    document.querySelector('.player-1-panel').classList.toggle('active');
+
+    //for disappearance of dice after 1 is rolled in dice
+    document.querySelector('.dice').style.display='none';
+
+
+
+}
