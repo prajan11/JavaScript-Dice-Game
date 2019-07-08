@@ -11,26 +11,8 @@ GAME RULES:
 
 var scores, roundScore, activePlayer;
 
-scores=[0,0];   //array for storing the score of each player of game
-roundScore = 0;  //varible for storing the score of each player in a round
-activePlayer = 0;  //varible for determining the active player
-
-
- 
- 
-//document.querySelector('#current-' + activePlayer).textContent = dice;
-//document.querySelector('#current-' + activePlayer).innerHTML = '<em>'+ dice+ '</em>';
-
-// var x = document.querySelector('#score-0').textContent;
-// console.log(x);
-
-document.getElementById('score-0').textContent=0;
-document.getElementById('current-0').textContent=0;
-document.getElementById('score-1').textContent=0;
-document.getElementById('current-1').textContent=0;
-
-document.querySelector('.dice').style.display = 'none';
-
+//calling game initialization function at the beginning of the game
+init();
 
 /* 
 for generating the random number between 1 and 6.
@@ -69,18 +51,14 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
         nextPlayer();
     }
 
-
 });
 
 document.querySelector('.btn-hold').addEventListener('click',function(){
     //Add current score to the global score
     scores[activePlayer] = scores[activePlayer] + roundScore;
 
-
-
     //Update the UI
     document.getElementById('score-'+activePlayer).textContent=scores[activePlayer];
-
 
     //Check if player won the game
     if(scores[activePlayer]>=20){
@@ -93,26 +71,15 @@ document.querySelector('.btn-hold').addEventListener('click',function(){
 
         //applying winner class to the winner player panel
         document.querySelector('.player-'+activePlayer+'-panel').classList.add('winner');
-        
+
          //removing active class from the winner
          document.querySelector('.player-'+activePlayer+'-panel').classList.remove('active');
-
-
     }
-    else{
-
-        //change the turn to the next player
-        nextPlayer();
-    
-        
+    else
+    {
+    //change the turn to the next player
+        nextPlayer();        
     }
-
-
-
-   
-
-
-    
 
 });
 
@@ -134,6 +101,35 @@ function nextPlayer(){
     //for disappearance of dice after 1 is rolled in dice
     document.querySelector('.dice').style.display='none';
 
+}
 
+document.querySelector('.btn-new').addEventListener('click',init);
+
+function init(){
+
+   
+    scores=[0,0];   //array for storing the score of each player of game
+    roundScore = 0;  //varible for storing the score of each player in a round
+    activePlayer = 0;  //varible for determining the active player
+
+    document.querySelector('.dice').style.display = 'none';
+
+    //setting all the scores to zero at the beginning of the game
+    document.getElementById('score-0').textContent=0;
+    document.getElementById('current-0').textContent=0;
+    document.getElementById('score-1').textContent=0;
+    document.getElementById('current-1').textContent=0;
+
+    //removing winner class from both the players at the beginning of the game
+    document.querySelector('.player-0-panel').classList.remove('winner');
+    document.querySelector('.player-1-panel').classList.remove('winner');
+
+    //removing active class from both the players at the beginning of the game
+    document.querySelector('.player-0-panel').classList.remove('active');
+    document.querySelector('.player-1-panel').classList.remove('active');
+    document.querySelector('.player-0-panel').classList.add('active');
+
+    document.querySelector('#name-0').textContent='Player 1';
+    document.querySelector('#name-1').textContent='Player 2';
 
 }
