@@ -9,7 +9,8 @@ GAME RULES:
 
 */
 
-var scores, roundScore, activePlayer, gameActiveStatus;
+var scores, roundScore, activePlayer, gameActiveStatus, winningScore;
+var diceSixCount = 0;
 
 //calling game initialization function at the beginning of the game
 init();
@@ -27,6 +28,8 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
 
             //Generating random numbers
         var dice = Math.floor(Math.random() * 6) +1; 
+        // var dice=6;
+   
 
         // Display the result
         var diceDOM = document.querySelector('.dice');
@@ -38,10 +41,36 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
         //to round score
         if(dice !==1){
 
-            roundScore = roundScore + dice;
-            document.querySelector('#current-'+ activePlayer).textContent = roundScore;
+            if(dice ===6){
+                diceSixCount++;
+                
+                if(diceSixCount==2){
+                    alert('Rolling of consecutive sixes!!!')
+                    diceSixCount=0;
+                    roundScore=0;
+                    scores[activePlayer]=0;
+                    document.getElementById('score-'+activePlayer).textContent=0;
+                    document.getElementById('current-'+activePlayer).textContent=0;
+                    nextPlayer();
+                    return;
+                }
+
+                roundScore = roundScore + dice;
+                document.querySelector('#current-'+ activePlayer).textContent = roundScore;  
+
+            }
+            else{
+                diceSixCount=0;
+                roundScore = roundScore + dice;
+                document.querySelector('#current-'+ activePlayer).textContent = roundScore;    
+            }
+
+            
+            // roundScore = roundScore + dice;
+            // document.querySelector('#current-'+ activePlayer).textContent = roundScore;
 
         }
+       
         else{ 
         //if 1 is rolled, 
         // - change the active player
@@ -50,15 +79,13 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
 
             
             //if 0 was active player, 1 is made active player and vice-versa 
+            alert('You rolled 1!!! Next Player turn now')
             nextPlayer();
         }
 
     }
 });
 
-
-
-    
 
     
    
@@ -74,7 +101,7 @@ document.querySelector('.btn-hold').addEventListener('click',function(){
         document.getElementById('score-'+activePlayer).textContent=scores[activePlayer];
 
         //Check if player won the game
-        if(scores[activePlayer]>=20){
+        if(scores[activePlayer]>=winningScore){
 
             //changing the name of cuurent player to winner
             document.querySelector('#name-'+activePlayer).textContent = "Winner!";
@@ -102,7 +129,6 @@ document.querySelector('.btn-hold').addEventListener('click',function(){
     
     
 
-
 function nextPlayer(){
 
     //switch the turn to the next player
@@ -126,6 +152,8 @@ document.querySelector('.btn-new').addEventListener('click',init);
 
 function init(){
 
+    winningScore = prompt("Please enter the winning score");
+
     gameActiveStatus=true;
     scores=[0,0];   //array for storing the score of each player of game
     roundScore = 0;  //varible for storing the score of each player in a round
@@ -146,6 +174,8 @@ function init(){
     //removing active class from both the players at the beginning of the game
     document.querySelector('.player-0-panel').classList.remove('active');
     document.querySelector('.player-1-panel').classList.remove('active');
+
+    //making player 1 as active in the beginning
     document.querySelector('.player-0-panel').classList.add('active');
 
     document.querySelector('#name-0').textContent='Player 1';
